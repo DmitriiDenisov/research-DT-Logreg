@@ -7,4 +7,4 @@ https://www.desmos.com/calculator/z6y6pyo43p
 
 ## Graph of custom loss
 
-https://www.desmos.com/calculator?lang=ru
+https://www.desmos.com/calculator/iqktkfwvcx
