@@ -4,6 +4,7 @@ from sklearn.datasets import make_circles, make_moons, make_classification
 import numpy as np
 
 from RTTree import RTTree, NumpyEncoder
+from utils import plot_2D
 
 np.random.seed(7)
 
@@ -20,8 +21,13 @@ print(json.dumps(temp.tree_struct, sort_keys=False, indent=4, cls=NumpyEncoder))
 # print(temp.tree_struct)
 print(pred)
 
+plot_2D(X, temp.tree_struct['Wopt'], y, temp)
+
+# Example with (N, M)
+"""
 X_new = np.random.randn(100, 4)
 y_new = np.random.choice([True, False], size=100).astype(int)
 temp = RTTree()
 temp.fit(X_new, y_new)
 temp.predict(X_new)
+"""
