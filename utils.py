@@ -26,8 +26,9 @@ def plot_2D(X: np.array, W: np.array, y: np.array, tree, title: str):
     x_vals = np.linspace(X.min(), X.max(), 100)
     y_vals = -(m0 / m1) * x_vals - b / m1
 
-    plt.scatter(X[y == -1][:, 0], X[y == -1][:, 1], label='y=-1')
     plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], label='y=1')
+    plt.scatter(X[y == -1][:, 0], X[y == -1][:, 1], label='y=-1')
+
     plt.plot(x_vals, y_vals, label=tree.tree_struct['Wopt'])
 
     # recursive plot
