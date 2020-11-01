@@ -50,6 +50,8 @@ center_x2 = np.array([1.5, 0])
 X1 = center_x1 + np.random.randn(n1, 2)
 X2 = center_x2 + np.random.randn(n2, 2)
 """
+
+"""
 # Example 1d
 np.random.seed(17)
 n1 = 50
@@ -62,6 +64,29 @@ X2 = center_x2 + np.random.randn(n2, 2)
 
 X = np.concatenate((X1, X2), axis=0)
 y = np.array([1] * n1 + [-1] * n2)
+"""
+
+import matplotlib.pyplot as plt
+# Note y=+/-1
+def make_concentric(X, r):
+    n = X.shape[0]
+    y = np.ones(n)
+    for i in range(n):
+        if np.linalg.norm(X[i]) > r:
+            y[i] = -1
+    return y
+
+
+# Example 5a
+np.random.seed(17)
+X = np.random.randn(100, 2)
+y = make_concentric(X, 0.8)
+
+plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1])
+plt.scatter(X[y == -1][:, 0], X[y == -1][:, 1])
+
+plt.grid(True)
+plt.show()
 
 temp = RTTree()
 temp.fit(X, y)
@@ -72,7 +97,10 @@ print(json.dumps(temp.tree_struct, sort_keys=False, indent=4, cls=NumpyEncoder))
 print(pred)
 
 # X: np.array (n, 2), y: np.array (n,) (y consists from -1 and 1)
-plot_2D(X, temp.tree_struct['Wopt'], y, temp, title='Example 1d')
+if not temp.tree_struct['terminal']:
+    plot_2D(X, temp.tree_struct['Wopt'], y, temp, title='3d')
+else:
+    print('No separating lines!')
 
 # Example with (N, M)
 """

@@ -19,7 +19,30 @@ def entropy1(labels):
 
 
 def func(w: np.array, x: np.array, y: np.array):
-    return np.mean(1 / (1 + np.exp(2.5 * y * np.dot(x, w))))
+    x_arg = np.dot(x, w)
+    return np.mean(1 / (1 + np.exp(2.5 * y * x_arg)))
+
+
+def func_linear(w: np.array, x: np.array, y: np.array):
+    x_arg = np.dot(x, w)
+    loss_list = []
+    for i, x_i in enumerate(x_arg):
+        if x_i < -1:
+            if y[i] == -1:
+                loss_list.append(0)
+            else:
+                loss_list.append(1)
+        elif -1 < x_i < 1:
+            if y[i] == -1:
+                loss_list.append(0.5 + 0.5 * x_i)
+            else:
+                loss_list.append(0.5 - 0.5 * x_i)
+        else:
+            if y[i] == -1:
+                loss_list.append(1)
+            else:
+                loss_list.append(0)
+    return np.mean(loss_list)
 
 
 def calculate_entropy(y: np.array, y_0: np.array, y_1: np.array):
@@ -31,7 +54,10 @@ def calculate_entropy(y: np.array, y_0: np.array, y_1: np.array):
 
 
 def split(x: np.array, y: np.array, W: np.array):  # y must be +/-1
-    result = fmin_slsqp(func, W, bounds=[(-1000, 1000)] * len(W), args=(x, y), disp=False, full_output=True)
+
+    # result = fmin_slsqp(func, W, bounds=[(-1000, 1000)] * len(W), args=(x, y), disp=False, full_output=True)
+    result = fmin_slsqp(func_linear, W, bounds=[(-1000, 1000)] * len(W), args=(x, y), disp=False, full_output=True)
+
     Wopt, fW, its, imode, smode = result
     return Wopt
 
@@ -114,6 +140,3 @@ class RTTree():
         X_test = np.c_[X_test, np.ones(X_test.shape[0])]
         pred = [self.predict_node(x, self.tree_struct) for x in X_test]
         return np.array(pred)
-
-
-
